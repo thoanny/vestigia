@@ -1,7 +1,7 @@
 import { Health } from '@capgo/capacitor-health';
 
 export interface DailySteps {
-  date: string;
+  date: string | undefined;
   steps: number;
 }
 
