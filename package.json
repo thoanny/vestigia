@@ -12,14 +12,19 @@
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",
     "vue-router": "^5.1.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.4.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.13.2",
     "@vitejs/plugin-vue": "^6.0.7",
