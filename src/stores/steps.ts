@@ -36,7 +36,7 @@ export const useStepsStore = defineStore('steps', {
       try {
         this.healthAvailable = await healthService.init();
         if (!this.healthAvailable) {
-          this.error = "L'API santé n'est pas disponible ou l'autorisation a été refusée.";
+          this.error = 'API santé indisponible ou autorisation refusée.';
         }
       } catch (err) {
         this.error = err instanceof Error ? err.message : "Erreur inconnue à l'initialisation.";

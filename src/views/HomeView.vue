@@ -1,15 +1,8 @@
 <script setup lang="ts">
-import AppLoading from '@/components/AppLoading.vue';
 import ProgressStatus from '@/components/ProgressStatus.vue';
 import ProgressSteps from '@/components/ProgressSteps.vue';
 import { useStepsStore } from '@/stores/steps';
-import {
-  IconBoltFilled,
-  IconExclamationCircle,
-  IconHeartFilled,
-  IconInfoSmall,
-  IconRefresh,
-} from '@tabler/icons-vue';
+import { IconAlertSmall, IconBoltFilled, IconHeartFilled, IconInfoSmall } from '@tabler/icons-vue';
 
 const stepsStore = useStepsStore();
 </script>
@@ -32,20 +25,17 @@ const stepsStore = useStepsStore();
       </div>
     </div>
 
-    <AppLoading v-if="stepsStore.loading" />
-
-    <div role="alert" class="alert alert-error alert-soft" v-else-if="stepsStore.error">
-      <IconExclamationCircle class="size-6 shrink-0" />
-      <span>{{ stepsStore.error }}</span>
-    </div>
-
-    <div
-      class="card card-sm bg-base-100 border border-base-300"
-      v-else-if="stepsStore.healthAvailable"
-    >
+    <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
-        <div class="flex justify-between">
+        <div class="flex justify-between min-h-6">
           <h4 class="card-title leading-none">Pas</h4>
+          <div
+            class="tooltip tooltip-left tooltip-error before:max-w-[12rem]"
+            v-if="stepsStore.error"
+            :data-tip="stepsStore.error"
+          >
+            <button class="btn btn-circle btn-error btn-soft btn-xs"><IconAlertSmall /></button>
+          </div>
           <div
             class="tooltip tooltip-left tooltip-primary"
             v-if="stepsStore.lastSyncedAt"
@@ -54,17 +44,7 @@ const stepsStore = useStepsStore();
             <button class="btn btn-circle btn-primary btn-soft btn-xs"><IconInfoSmall /></button>
           </div>
         </div>
-        <ProgressSteps :value="stepsStore.todayStepsLabel" />
-
-        <div class="card-actions mt-2">
-          <button
-            class="btn btn-primary btn-block"
-            :disabled="stepsStore.loading"
-            @click="stepsStore.refreshTodaySteps()"
-          >
-            <IconRefresh class="size-5" />Actualiser
-          </button>
-        </div>
+        <ProgressSteps :value="stepsStore.todayStepsLabel" :loading="stepsStore.loading" />
       </div>
     </div>
   </div>
