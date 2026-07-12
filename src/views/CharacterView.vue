@@ -33,9 +33,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
 </script>
 
 <template>
-  <div class="p-6 pb-24 max-w-sm mx-auto flex flex-col gap-4">
-    <h1 class="text-xl font-bold text-center">Vestigia — POC</h1>
-
+  <div class="flex flex-col gap-4">
     <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
         <h4 class="card-title leading-none">Personnage#1234</h4>

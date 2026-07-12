@@ -2,7 +2,8 @@
 import { useStepsStore } from '@/stores/steps';
 import { App } from '@capacitor/app';
 import { onMounted, onUnmounted } from 'vue';
-import AppDock from './components/AppDock.vue';
+import MenuFooter from './components/MenuFooter.vue';
+import MenuHeader from './components/MenuHeader.vue';
 
 const stepsStore = useStepsStore();
 
@@ -30,12 +31,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header>
-    <AppDock />
-  </header>
-  <main>
-    <RouterView />
-  </main>
+  <div>
+    <header>
+      <MenuHeader />
+    </header>
+    <main class="p-4 top-16 h-[calc(100dvh-8rem)] relative overflow-auto">
+      <RouterView />
+    </main>
+    <footer>
+      <MenuFooter />
+    </footer>
+  </div>
 </template>
 
 <style scoped></style>

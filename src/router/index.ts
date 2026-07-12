@@ -1,13 +1,15 @@
+import AboutView from '@/views/AboutView.vue';
+import CharacterView from '@/views/CharacterView.vue';
 import ExploreView from '@/views/ExploreView.vue';
-import HomeView from '@/views/HomeView.vue';
 import InboxView from '@/views/InboxView.vue';
+import InventoryView from '@/views/InventoryView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
     path: '/',
-    component: HomeView,
+    component: CharacterView,
   },
   {
     path: '/explore',
@@ -20,6 +22,14 @@ const routes = [
   {
     path: '/settings',
     component: SettingsView,
+  },
+  {
+    path: '/about',
+    component: AboutView,
+  },
+  {
+    path: '/inventory',
+    component: InventoryView,
   },
 ];
 
