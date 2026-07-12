@@ -21,8 +21,8 @@ export const useStepsStore = defineStore('steps', {
   }),
 
   getters: {
-    todayStepsLabel: (state): number => {
-      return Number(state.todaySteps.toLocaleString('fr-FR'));
+    todayStepsLabel: (state): string => {
+      return state.todaySteps.toLocaleString('fr-FR');
     },
   },
 

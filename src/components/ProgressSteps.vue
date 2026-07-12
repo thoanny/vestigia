@@ -1,6 +1,6 @@
 <template>
   <div
-    class="radial-progress mx-auto text-sm border-10"
+    class="radial-progress mx-auto text-sm border-10 text-center"
     :class="{
       'text-primary bg-primary-content border-primary-content':
         !stepsStore.loading && !stepsStore.error,
@@ -29,7 +29,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  max: 10000,
+  max: 25000,
 });
 
 const stepsStore = useStepsStore();
