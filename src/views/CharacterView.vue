@@ -12,6 +12,7 @@ import {
   IconWalk,
 } from '@tabler/icons-vue';
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const stepsStore = useStepsStore();
 
@@ -34,6 +35,13 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
 
 <template>
   <div class="flex flex-col gap-4">
+    <RouterLink to="/battlepass" class="card card-xs bg-base-100 border border-base-300">
+      <div class="card-body">
+        <h4 class="card-title">Battle pass</h4>
+        <div>TODO : widget le plus simple possible</div>
+      </div>
+    </RouterLink>
+
     <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
         <h4 class="card-title leading-none">Personnage#1234</h4>
@@ -45,6 +53,13 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
           <IconBoltFilled class="size-8 text-warning shrink-0" stroke-width="1.5" />
           <ProgressStatus label="Énergie" :value="100" :max="1000" color="warning" class="grow" />
         </div>
+      </div>
+    </div>
+
+    <div class="card card-sm bg-base-100 border border-base-300">
+      <div class="card-body">
+        <h4 class="card-title">Inventaire</h4>
+        <div>TODO : Widget inventaire</div>
       </div>
     </div>
 
@@ -68,6 +83,11 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
           </div>
         </div>
         <ProgressSteps :value="stepsStore.todaySteps" :loading="stepsStore.loading" />
+        <div class="card-actions">
+          <RouterLink to="/history" class="btn btn-primary btn-link btn-xs">
+            Historique de pas
+          </RouterLink>
+        </div>
       </div>
     </div>
 
@@ -130,7 +150,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
         >
           <li
             class="list-row py-3"
-            v-for="i in [1_000, 2_500, 5_000, 10_000, 15_000 /*, 20_000, 25_000*/]"
+            v-for="i in [35_000, 50_000, 70_000, 100_000, 150_000 /*, 20_000, 25_000*/]"
             :key="i"
           >
             <div>
@@ -142,9 +162,9 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
             </div>
             <div class="flex flex-col justify-center gap-1">
               <div class="flex justify-between items-baseline">
-                <div class="font-semibold text-xs">Valider {{ i * 7 }} pas</div>
+                <div class="font-semibold text-xs">Valider {{ i }} pas</div>
                 <div class="text-xs">
-                  {{ Math.round((stepsStore.todaySteps / i) * 7 * 100) }}&thinsp;%
+                  {{ Math.round((stepsStore.todaySteps / i) * 100) }}&thinsp;%
                 </div>
               </div>
               <progress
@@ -153,7 +173,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
                 :max="i * 7"
               ></progress>
             </div>
-            <button class="btn btn-square btn-success" :disabled="stepsStore.todaySteps < i * 7">
+            <button class="btn btn-square btn-success" :disabled="stepsStore.todaySteps < i">
               <IconCheckFilled class="size-6" />
             </button>
           </li>
@@ -164,7 +184,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
         >
           <li
             class="list-row py-3"
-            v-for="(time, steps) in { 500: 15, 600: 15, 1_500: 25, 2_500: 45, 5_500: 60 }"
+            v-for="(time, steps) in { 1200: 10, 1650: 15, 2_625: 25, 4_500: 45, 5_700: 60 }"
             :key="steps"
           >
             <div>
