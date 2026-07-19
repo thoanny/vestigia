@@ -1,16 +1,9 @@
 <script setup lang="ts">
+import { default as GoalList } from '@/components/GoalList.vue';
 import ProgressStatus from '@/components/ProgressStatus.vue';
 import ProgressSteps from '@/components/ProgressSteps.vue';
 import { useStepsStore } from '@/stores/steps';
-import {
-  IconAlertSmall,
-  IconBoltFilled,
-  IconCheckFilled,
-  IconHeartFilled,
-  IconInfoSmall,
-  IconStopwatch,
-  IconWalk,
-} from '@tabler/icons-vue';
+import { IconAlertSmall, IconBoltFilled, IconHeartFilled, IconInfoSmall } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -109,109 +102,9 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
           >
         </div>
 
-        <ul
-          class="list border-t border-base-content/5 -mt-2 -mb-4 -mx-4"
-          v-if="goalsTabActive === 'daily'"
-        >
-          <li
-            class="list-row py-3"
-            v-for="i in [1_000, 2_500, 5_000, 10_000, 15_000 /*, 20_000, 25_000*/]"
-            :key="i"
-          >
-            <div>
-              <div
-                class="size-10 bg-primary/20 text-primary rounded flex items-center justify-center"
-              >
-                <IconWalk />
-              </div>
-            </div>
-            <div class="flex flex-col justify-center gap-1">
-              <div class="flex justify-between items-baseline">
-                <div class="font-semibold text-xs">Valider {{ i }} pas</div>
-                <div class="text-xs">
-                  {{ Math.round((stepsStore.todaySteps / i) * 100) }}&thinsp;%
-                </div>
-              </div>
-              <progress
-                class="progress progress-primary h-1"
-                :value="stepsStore.todaySteps"
-                :max="i"
-              ></progress>
-            </div>
-            <button class="btn btn-square btn-success" :disabled="stepsStore.todaySteps < i">
-              <IconCheckFilled class="size-6" />
-            </button>
-          </li>
-        </ul>
-
-        <ul
-          class="list border-t border-base-content/5 -mt-2 -mb-4 -mx-4"
-          v-else-if="goalsTabActive === 'weekly'"
-        >
-          <li
-            class="list-row py-3"
-            v-for="i in [35_000, 50_000, 70_000, 100_000, 150_000 /*, 20_000, 25_000*/]"
-            :key="i"
-          >
-            <div>
-              <div
-                class="size-10 bg-primary/20 text-primary rounded flex items-center justify-center"
-              >
-                <IconWalk />
-              </div>
-            </div>
-            <div class="flex flex-col justify-center gap-1">
-              <div class="flex justify-between items-baseline">
-                <div class="font-semibold text-xs">Valider {{ i }} pas</div>
-                <div class="text-xs">
-                  {{ Math.round((stepsStore.todaySteps / i) * 100) }}&thinsp;%
-                </div>
-              </div>
-              <progress
-                class="progress progress-primary h-1"
-                :value="stepsStore.todaySteps"
-                :max="i * 7"
-              ></progress>
-            </div>
-            <button class="btn btn-square btn-success" :disabled="stepsStore.todaySteps < i">
-              <IconCheckFilled class="size-6" />
-            </button>
-          </li>
-        </ul>
-        <ul
-          class="list border-t border-base-content/5 -mt-2 -mb-4 -mx-4"
-          v-else-if="goalsTabActive === 'challenge'"
-        >
-          <li
-            class="list-row py-3"
-            v-for="(time, steps) in { 1200: 10, 1650: 15, 2_625: 25, 4_500: 45, 5_700: 60 }"
-            :key="steps"
-          >
-            <div>
-              <div
-                class="size-10 bg-primary/20 text-primary rounded flex items-center justify-center"
-              >
-                <IconWalk />
-              </div>
-            </div>
-            <div class="flex flex-col justify-center gap-1">
-              <div class="flex justify-between items-baseline">
-                <div class="font-semibold text-xs">{{ steps }} pas en {{ time }}&thinsp;min.</div>
-                <div class="text-xs">
-                  {{ Math.round((stepsStore.todaySteps / parseInt(steps)) * 100) }}&thinsp;%
-                </div>
-              </div>
-              <progress
-                class="progress progress-primary h-1"
-                :value="stepsStore.todaySteps"
-                :max="steps"
-              ></progress>
-            </div>
-            <button class="btn btn-square btn-success">
-              <IconStopwatch class="size-6" />
-            </button>
-          </li>
-        </ul>
+        <GoalList v-if="goalsTabActive === 'daily'" type="daily" />
+        <GoalList v-else-if="goalsTabActive === 'weekly'" type="weekly" />
+        <GoalList v-else-if="goalsTabActive === 'challenge'" type="challenge" />
       </div>
     </div>
   </div>

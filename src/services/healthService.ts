@@ -49,6 +49,23 @@ class HealthService {
     return this.getStepsBetween(startOfDay, now);
   }
 
+  async getStepsWeek(): Promise<number> {
+    if (!this.available) return 0;
+
+    const today = new Date();
+
+    const day = today.getDay(); // 0: dimanche, 1: lundi
+    const diff = day === 0 ? -6 : 1 - day;
+
+    const firstDayOfWeek = new Date(today);
+    firstDayOfWeek.setDate(today.getDate() + diff);
+    firstDayOfWeek.setHours(0, 0, 0, 0);
+
+    const now = new Date();
+
+    return this.getStepsBetween(firstDayOfWeek, now);
+  }
+
   async getStepsBetween(startDate: Date, endDate: Date): Promise<number> {
     if (!this.available) return 0;
 

@@ -4,23 +4,27 @@ import { App } from '@capacitor/app';
 import { onMounted, onUnmounted } from 'vue';
 import MenuFooter from './components/MenuFooter.vue';
 import MenuHeader from './components/MenuHeader.vue';
+import { useCharacterStore } from './stores/character.ts';
 
 const stepsStore = useStepsStore();
+const characterStore = useCharacterStore();
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
 let appStateListener: Awaited<ReturnType<typeof App.addListener>> | null = null;
 
 onMounted(async () => {
   stepsStore.init();
+  await characterStore.restoreGoals();
 
-  appStateListener = await App.addListener('appStateChange', ({ isActive }) => {
+  appStateListener = await App.addListener('appStateChange', async ({ isActive }) => {
     if (isActive) {
-      stepsStore.refreshTodaySteps();
+      stepsStore.refreshTotalSteps();
+      await characterStore.checkChallengeTimeout();
     }
   });
 
   pollInterval = setInterval(() => {
-    stepsStore.refreshTodaySteps();
+    stepsStore.refreshTotalSteps();
   }, 60_000);
 });
 

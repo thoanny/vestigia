@@ -7,6 +7,7 @@ interface StepsState {
   loading: boolean;
   error: string | null;
   todaySteps: number;
+  weekSteps: number;
   lastSyncedAt: Date | null;
 }
 
@@ -17,6 +18,7 @@ export const useStepsStore = defineStore('steps', {
     loading: false,
     error: null,
     todaySteps: 0,
+    weekSteps: 0,
     lastSyncedAt: null,
   }),
 
@@ -47,11 +49,11 @@ export const useStepsStore = defineStore('steps', {
       }
 
       if (this.healthAvailable) {
-        await this.refreshTodaySteps();
+        await this.refreshTotalSteps();
       }
     },
 
-    async refreshTodaySteps() {
+    async refreshTotalSteps() {
       if (!this.healthAvailable) return;
 
       this.loading = true;
@@ -59,6 +61,7 @@ export const useStepsStore = defineStore('steps', {
 
       try {
         this.todaySteps = await healthService.getStepsToday();
+        this.weekSteps = await healthService.getStepsWeek();
         this.lastSyncedAt = new Date();
       } catch (err) {
         this.error = err instanceof Error ? err.message : 'Erreur lors de la lecture des pas.';
@@ -73,6 +76,7 @@ export const useStepsStore = defineStore('steps', {
       this.loading = false;
       this.error = null;
       this.todaySteps = 0;
+      this.weekSteps = 0;
       this.lastSyncedAt = null;
     },
   },
