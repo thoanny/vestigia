@@ -6,7 +6,7 @@ import {
   type GoalConfig,
   type GoalStatus,
 } from '@/types/goal';
-import type { InventoryItem } from '@/types/item';
+import { ITEMS_LIST, type InventoryItem } from '@/types/item';
 import { getCurrentWeekDateKeys, getDateKey } from '@/utils/date';
 import { Preferences } from '@capacitor/preferences';
 import { defineStore } from 'pinia';
@@ -20,18 +20,42 @@ interface ActivityEntry {
 interface characterState {
   goals: Record<string, GoalConfig[]>;
   activeChallenge: ActiveChallenge | null;
-  inventory: Record<string, InventoryItem[]>;
+  // inventory: Record<string, InventoryItem[]>;
   activity: Record<string, ActivityEntry>;
 }
 
 const STORAGE_KEY_ACTIVE_CHALLENGE = 'vestigia_active_challenge';
 const STORAGE_KEY_ACTIVITY = 'vestigia_activity';
 
+function mergeExpandInventory(items: InventoryItem[]): InventoryItem[] {
+  const merged = new Map<string, InventoryItem>();
+  const nonStackable: InventoryItem[] = [];
+
+  for (const item of items) {
+    if (!item.data!.stackable) {
+      const count = Math.max(1, item.quantity);
+      for (let i = 0; i < count; i++) {
+        nonStackable.push({ ...item, quantity: 1 });
+      }
+      continue;
+    }
+
+    const existing = merged.get(item.itemId);
+    if (existing) {
+      existing.quantity += item.quantity;
+    } else {
+      merged.set(item.itemId, { ...item });
+    }
+  }
+
+  return [...merged.values(), ...nonStackable];
+}
+
 export const useCharacterStore = defineStore('character', {
   state: (): characterState => ({
     goals: {},
     activeChallenge: null,
-    inventory: {},
+    // inventory: {},
     activity: {},
   }),
 
@@ -92,6 +116,22 @@ export const useCharacterStore = defineStore('character', {
     activeChallengeDeadline(): number | null {
       if (!this.activeChallenge) return null;
       return this.activeChallenge.startedAt + this.activeChallenge.duration;
+    },
+    cleanInventory() {
+      const inventoryItems = [
+        { itemId: 'coin', quantity: 100 },
+        { itemId: 'gem', quantity: 20 },
+        { itemId: 'gold', quantity: 10 },
+        { itemId: 'chest', quantity: 3 },
+        { itemId: 'chest', quantity: 10 },
+        { itemId: 'gold', quantity: 50 },
+        { itemId: 'chest', quantity: 1 },
+      ].map((item) => {
+        const details = ITEMS_LIST.find((i) => i.id === item.itemId);
+        return { ...item, data: details };
+      });
+
+      return mergeExpandInventory(inventoryItems);
     },
   },
 
@@ -199,7 +239,7 @@ export const useCharacterStore = defineStore('character', {
       }
 
       return { success: false, steps: 0, missing: 0 };
-      // Chercher le type de challenge :
+      // TODO : Chercher le type de challenge :
       // Si challenge, vérifier si objectif atteint sur le laps de temps
       // Si autre, vérifier si nombre de pas requis dans la fenêtre (aujourd'hui ou semaine)
       // Ajouter dans l'inventaire un coffre

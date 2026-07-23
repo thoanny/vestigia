@@ -15,4 +15,44 @@ export interface Item {
 export interface InventoryItem {
   itemId: string;
   quantity: number;
+  data?: Item;
 }
+
+export const ITEMS_LIST: Item[] = [
+  {
+    id: 'coin',
+    name: 'Or',
+    description: 'Description...',
+    type: 'currency',
+    rarity: 'rare',
+    icon: '/img/icons/coin.png',
+    stackable: true,
+  },
+  {
+    id: 'gold',
+    name: "Barre d'or",
+    description: 'Description...',
+    type: 'currency',
+    rarity: 'rare',
+    icon: '/img/icons/gold.png',
+    stackable: true,
+  },
+  {
+    id: 'gem',
+    name: 'Gemmes',
+    description: 'Description gemmes...',
+    type: 'currency',
+    rarity: 'rare',
+    icon: '/img/icons/gem.png',
+    stackable: true,
+  },
+  {
+    id: 'chest',
+    name: 'Coffre',
+    description: 'Description coffre...',
+    type: 'consumable',
+    rarity: 'rare',
+    icon: '/img/icons/chest.png',
+    stackable: false,
+  },
+];

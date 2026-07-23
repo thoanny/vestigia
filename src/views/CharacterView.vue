@@ -2,12 +2,20 @@
 import { default as GoalList } from '@/components/GoalList.vue';
 import ProgressStatus from '@/components/ProgressStatus.vue';
 import ProgressSteps from '@/components/ProgressSteps.vue';
+import { useCharacterStore } from '@/stores/character';
 import { useStepsStore } from '@/stores/steps';
-import { IconAlertSmall, IconBoltFilled, IconHeartFilled, IconInfoSmall } from '@tabler/icons-vue';
+import {
+  IconAlertSmall,
+  IconBoltFilled,
+  IconHeartFilled,
+  IconInfoSmall,
+  IconPlus,
+} from '@tabler/icons-vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const stepsStore = useStepsStore();
+const characterStore = useCharacterStore();
 
 const goalsTabs = [
   {
@@ -49,12 +57,29 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
       </div>
     </div>
 
-    <div class="card card-sm bg-base-100 border border-base-300">
+    <RouterLink to="/inventory" class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
         <h4 class="card-title">Inventaire</h4>
-        <div>TODO : Widget inventaire</div>
+        <div class="grid grid-cols-4 gap-2">
+          <div
+            v-for="item in characterStore.cleanInventory.slice(0, 3)"
+            :key="item.data!.id"
+            class="aspect-square w-full rounded-box overflow-hidden bg-base-300 p-2 relative"
+          >
+            <img :src="item.data!.icon" class="object-contain w-full h-full" />
+            <span
+              class="badge badge-neutral badge-xs absolute bottom-1 right-1 px-1"
+              v-if="item.quantity > 1"
+            >
+              {{ item.quantity }}
+            </span>
+          </div>
+          <div class="btn btn-soft btn-primary btn-square h-full w-full">
+            <IconPlus />
+          </div>
+        </div>
       </div>
-    </div>
+    </RouterLink>
 
     <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
