@@ -100,7 +100,7 @@ class HealthService {
       const steps = await this.getStepsBetween(dayStart, dayEnd);
 
       result.push({
-        date: dayStart.toISOString().split('T')[0],
+        date: new Intl.DateTimeFormat('sv-SE').format(dayStart),
         steps,
       });
     }
