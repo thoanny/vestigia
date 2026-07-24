@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { default as GoalList } from '@/components/GoalList.vue';
+import InventoryItemBlock from '@/components/InventoryItemBlock.vue';
 import ProgressStatus from '@/components/ProgressStatus.vue';
 import ProgressSteps from '@/components/ProgressSteps.vue';
 import { useCharacterStore } from '@/stores/character';
@@ -61,19 +62,11 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
       <div class="card-body">
         <h4 class="card-title">Inventaire</h4>
         <div class="grid grid-cols-4 gap-2">
-          <div
+          <InventoryItemBlock
             v-for="item in characterStore.cleanInventory.slice(0, 3)"
             :key="item.data!.id"
-            class="aspect-square w-full rounded-box overflow-hidden bg-base-300 p-2 relative"
-          >
-            <img :src="item.data!.icon" class="object-contain w-full h-full" />
-            <span
-              class="badge badge-neutral badge-xs absolute bottom-1 right-1 px-1"
-              v-if="item.quantity > 1"
-            >
-              {{ item.quantity }}
-            </span>
-          </div>
+            :item="item"
+          />
           <div class="btn btn-soft btn-primary btn-square h-full w-full">
             <IconPlus />
           </div>
