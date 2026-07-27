@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { menuService } from '@/services/menuService';
+import { useAuthStore } from '@/stores/auth';
 import { RouterLink } from 'vue-router';
+
+const authStore = useAuthStore();
 </script>
 
 <template>
-  <nav class="dock">
+  <nav class="dock" v-show="authStore.isAuthenticated">
     <RouterLink
       v-for="item in menuService.getMenuFooter()"
       :key="item.id"

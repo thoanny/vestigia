@@ -1,71 +1,95 @@
-import AboutView from '@/views/AboutView.vue';
-import AchievementsView from '@/views/AchievementsView.vue';
-import BattlePassView from '@/views/BattlePassView.vue';
-import CharacterView from '@/views/CharacterView.vue';
-import ExploreView from '@/views/ExploreView.vue';
-import HelpView from '@/views/HelpView.vue';
-import HistoryView from '@/views/HistoryView.vue';
-import InboxView from '@/views/InboxView.vue';
-import InventoryView from '@/views/InventoryView.vue';
-import LeaderboardView from '@/views/LeaderboardView.vue';
-import SettingsView from '@/views/SettingsView.vue';
-import ShopView from '@/views/ShopView.vue';
+import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
     path: '/',
-    component: CharacterView,
+    name: 'character',
+    component: () => import('@/views/CharacterView.vue'),
   },
   {
     path: '/history',
-    component: HistoryView,
+    name: 'history',
+    component: () => import('@/views/HistoryView.vue'),
   },
   {
     path: '/inventory',
-    component: InventoryView,
+    name: 'inventory',
+    component: () => import('@/views/InventoryView.vue'),
   },
   {
     path: '/explore',
-    component: ExploreView,
+    name: 'explore',
+    component: () => import('@/views/ExploreView.vue'),
   },
   {
     path: '/battlepass',
-    component: BattlePassView,
+    name: 'battlepass',
+    component: () => import('@/views/BattlePassView.vue'),
   },
   {
     path: '/achievements',
-    component: AchievementsView,
+    name: 'achievements',
+    component: () => import('@/views/AchievementsView.vue'),
   },
   {
     path: '/inbox',
-    component: InboxView,
+    name: 'inbox',
+    component: () => import('@/views/InboxView.vue'),
   },
   {
     path: '/shop',
-    component: ShopView,
+    name: 'shop',
+    component: () => import('@/views/ShopView.vue'),
   },
   {
     path: '/leaderboard',
-    component: LeaderboardView,
+    name: 'leaderboard',
+    component: () => import('@/views/LeaderboardView.vue'),
   },
   {
     path: '/settings',
-    component: SettingsView,
+    name: 'settings',
+    component: () => import('@/views/SettingsView.vue'),
   },
   {
     path: '/help',
-    component: HelpView,
+    name: 'help',
+    component: () => import('@/views/HelpView.vue'),
+    meta: { public: true },
   },
   {
     path: '/about',
-    component: AboutView,
+    name: 'about',
+    component: () => import('@/views/AboutView.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/LoginView.vue'),
+    meta: { public: true },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
+});
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore();
+
+  if (!auth.isReady) {
+    await auth.fetchCurrentUser();
+  }
+
+  if (!to.meta.public && !auth.isAuthenticated) {
+    return { name: 'login' };
+  }
+
+  if (to.name === 'login' && auth.isAuthenticated) {
+    return { path: '/' };
+  }
 });
 
 export default router;

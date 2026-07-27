@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { IconDots } from '@tabler/icons-vue';
+import { IconDots, IconPower } from '@tabler/icons-vue';
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 
 import { menuService } from '@/services/menuService';
+import { useAuthStore } from '@/stores/auth';
 
 const menuModal = ref();
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = async () => {
+  await authStore.logout().then(() => {
+    menuModal.value.close();
+    router.push({ name: 'login' });
+  });
+};
 </script>
 
 <template>
@@ -14,7 +25,11 @@ const menuModal = ref();
       <RouterLink to="/" class="btn btn-ghost text-xl px-3">Vestigia</RouterLink>
     </div>
     <div class="flex-none">
-      <button class="btn btn-square btn-ghost" @click="menuModal.showModal()">
+      <button
+        class="btn btn-square btn-ghost"
+        @click="menuModal.showModal()"
+        v-show="authStore.isAuthenticated"
+      >
         <IconDots class="size-5" />
       </button>
     </div>
@@ -32,6 +47,12 @@ const menuModal = ref();
             <component :is="item.icon" class="size-5" v-if="item.icon" />
             {{ item.title }}
           </RouterLink>
+        </li>
+        <li v-if="authStore.isAuthenticated">
+          <a class="text-error" @click.prevent="handleLogout">
+            <IconPower class="size-5" />
+            Déconnexion
+          </a>
         </li>
       </ul>
     </div>
