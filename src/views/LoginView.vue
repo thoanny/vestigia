@@ -1,6 +1,6 @@
-<!-- src/views/LoginView.vue -->
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
+import { IconEye, IconEyeOff } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -11,6 +11,7 @@ const email = ref('');
 const password = ref('');
 const nickname = ref('');
 const mode = ref<'login' | 'register'>('login');
+const hidePassword = ref(true);
 
 async function handleSubmit() {
   try {
@@ -20,9 +21,7 @@ async function handleSubmit() {
       await auth.register(nickname.value, email.value, password.value);
     }
     router.push('/');
-  } catch {
-    // l'erreur est déjà exposée via auth.error, affichée dans le template
-  }
+  } catch {}
 }
 
 function toggleMode() {
@@ -64,14 +63,21 @@ function toggleMode() {
 
         <fieldset class="fieldset">
           <label for="password" class="label">Mot de passe</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            autocomplete="current-password"
-            class="input w-full"
-          />
+          <div class="input w-full">
+            <input
+              id="password"
+              v-model="password"
+              :type="hidePassword ? 'password' : 'text'"
+              required
+              autocomplete="current-password"
+              class="grow w-full"
+            />
+            <label class="swap">
+              <input type="checkbox" v-model="hidePassword" />
+              <IconEye class="swap-off size-5" />
+              <IconEyeOff class="swap-on size-5" />
+            </label>
+          </div>
         </fieldset>
 
         <div role="alert" class="alert alert-error alert-soft" v-if="auth.error">

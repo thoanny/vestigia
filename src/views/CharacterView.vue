@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import AvatarEditModal from '@/components/AvatarEditModal.vue';
 import { default as GoalList } from '@/components/GoalList.vue';
 import InventoryItemBlock from '@/components/InventoryItemBlock.vue';
 import ProgressStatus from '@/components/ProgressStatus.vue';
 import ProgressSteps from '@/components/ProgressSteps.vue';
+import { useAuthStore } from '@/stores/auth';
 import { useCharacterStore } from '@/stores/character';
 import { useStepsStore } from '@/stores/steps';
 import {
@@ -17,6 +19,7 @@ import { RouterLink } from 'vue-router';
 
 const stepsStore = useStepsStore();
 const characterStore = useCharacterStore();
+const authStore = useAuthStore();
 
 const goalsTabs = [
   {
@@ -46,7 +49,15 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
 
     <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
-        <h4 class="card-title leading-none">Personnage#1234</h4>
+        <div class="flex gap-3">
+          <AvatarEditModal />
+          <h4 class="card-title leading-none flex-1">
+            {{ authStore.user?.nickname || 'Inconnu' }}#1234
+          </h4>
+        </div>
+
+        <div class="divider h-[1px] my-2"></div>
+
         <div class="flex gap-2 items-center">
           <IconHeartFilled class="size-8 text-error shrink-0" stroke-width="1.5" />
           <ProgressStatus label="Santé" :value="55" :max="100" color="error" class="grow" />

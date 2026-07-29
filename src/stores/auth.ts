@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 
 interface User {
   id: number;
-  email: string;
+  isVerified: boolean;
+  nickname: string;
+  member: boolean;
 }
 
 interface AuthState {
