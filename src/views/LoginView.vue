@@ -31,7 +31,7 @@ function toggleMode() {
 </script>
 
 <template>
-  <div class="card card-sm border border-base-300">
+  <div class="card card-sm border border-base-300 bg-base-100">
     <div class="card-body">
       <h1 class="card-title">{{ mode === 'login' ? 'Connexion' : 'Inscription' }}</h1>
 

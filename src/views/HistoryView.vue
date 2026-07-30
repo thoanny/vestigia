@@ -68,7 +68,7 @@ const data = computed(() => {
       {
         data: steps.value.map((step) => step.steps),
         label: 'Nombre de pas',
-        backgroundColor: 'oklch(45% 0.24 277.023)',
+        backgroundColor: 'oklch(87.14% 0.286 141.53)',
         borderRadius: Number.MAX_VALUE,
         borderSkipped: false,
       },

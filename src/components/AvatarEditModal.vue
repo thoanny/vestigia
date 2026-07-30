@@ -10,13 +10,13 @@
     <dialog ref="avatarEditModal" class="modal modal-top">
       <div class="modal-box max-w-[19rem] mx-auto flex flex-col gap-4">
         <h3 class="text-lg font-bold">Modifier l'avatar</h3>
-        <div class="aspect-square w-full bg-primary rounded-box mx-auto mask mask-squircle">
+        <div class="aspect-square w-full bg-base-300 rounded-box mx-auto mask mask-squircle">
           <AvatarRenderer :config="avatarConfig" />
         </div>
         <AvatarPicker v-model:config="avatarConfig" />
         <div class="modal-action">
           <form method="dialog" class="w-full">
-            <button class="btn btn-block">Fermer</button>
+            <button class="btn btn-block btn-primary">Fermer</button>
           </form>
         </div>
       </div>

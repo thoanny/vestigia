@@ -61,7 +61,7 @@ const rows = computed(() =>
       <div class="flex flex-1 items-center justify-between gap-2">
         <button
           type="button"
-          class="btn btn-circle btn-neutral btn-sm"
+          class="btn btn-circle btn-primary btn-sm"
           :disabled="!row.hasOptions"
           @click="cycle(row.category, -1)"
         >
@@ -72,7 +72,7 @@ const rows = computed(() =>
 
         <button
           type="button"
-          class="btn btn-circle btn-neutral btn-sm"
+          class="btn btn-circle btn-primary btn-sm"
           :disabled="!row.hasOptions"
           @click="cycle(row.category, 1)"
         >
