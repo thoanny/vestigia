@@ -30,10 +30,11 @@ const goalsTabs = [
     id: 'weekly',
     name: 'Hebdomadaires',
   },
-  {
-    id: 'challenge',
-    name: 'Défis',
-  },
+  // TODO : réactiver les challenges
+  // {
+  //   id: 'challenge',
+  //   name: 'Défis',
+  // },
 ];
 const goalsTabActive = ref(goalsTabs[0]!.id);
 </script>

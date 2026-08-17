@@ -1,17 +1,12 @@
-import { API_BASE_URL } from '@/config';
 import { Preferences } from '@capacitor/preferences';
+import { apiClient } from './apiClient';
 
 const TOKEN_KEY = 'vestigia_token';
 const REFRESH_KEY = 'vestigia_refresh_token';
 
 export const authService = {
   async login(email: string, password: string) {
-    const res = await fetch(`${API_BASE_URL}/../token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
+    const res = await apiClient.post('~/token', { email, password });
     if (!res.ok) throw new Error('Identifiants invalides');
 
     const data = await res.json();
@@ -25,14 +20,12 @@ export const authService = {
   },
 
   async refresh() {
+    await Preferences.remove({ key: TOKEN_KEY });
+
     const { value: refreshToken } = await Preferences.get({ key: REFRESH_KEY });
     if (!refreshToken) throw new Error('No refresh token');
 
-    const res = await fetch(`${API_BASE_URL}/../token/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: refreshToken }),
-    });
+    const res = await apiClient.post('~/token/refresh', { refresh_token: refreshToken });
 
     if (!res.ok) throw new Error('Refresh failed');
 
@@ -48,19 +41,12 @@ export const authService = {
   },
 
   async register(nickname: string, email: string, password: string) {
-    const res = await fetch(`${API_BASE_URL}/../user/create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname, email, password }),
-    });
+    const res = await apiClient.post('~/user/create', { nickname, email, password });
     if (!res.ok) throw new Error('Inscription impossible');
   },
 
   async me() {
-    const token = await this.getToken();
-    const res = await fetch(`${API_BASE_URL}/../@me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await apiClient.get('~/@me');
     if (!res.ok) throw new Error('Session invalide');
     return res.json();
   },

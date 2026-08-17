@@ -1,5 +1,4 @@
 import { useCharacterStore } from '@/stores/character';
-import { App } from '@capacitor/app';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const CLOCK_INTERVAL_MS = 1_000;
@@ -14,33 +13,32 @@ export function useChallengeTimer() {
   let removeListener: (() => void) | undefined;
 
   const poll = () => {
-    console.log('poll');
-    store.refreshChallengeSteps();
-    store.checkChallengeTimeout();
+    return; // TODO : réactiver les challenges
+    // console.log('poll');
+    // store.refreshChallengeSteps();
+    // store.checkChallengeTimeout();
   };
 
   onMounted(async () => {
-    poll();
-
-    clockId = setInterval(() => {
-      now.value = Date.now();
-    }, CLOCK_INTERVAL_MS);
-
-    pollId = setInterval(poll, POLL_INTERVAL_MS);
-
-    const listener = await App.addListener('appStateChange', ({ isActive }) => {
-      if (isActive) {
-        now.value = Date.now();
-        poll();
-      }
-    });
-    removeListener = () => listener.remove();
+    // TODO : réactiver les challenges
+    // poll();
+    // clockId = setInterval(() => {
+    //   now.value = Date.now();
+    // }, CLOCK_INTERVAL_MS);
+    // pollId = setInterval(poll, POLL_INTERVAL_MS);
+    // const listener = await App.addListener('appStateChange', ({ isActive }) => {
+    //   if (isActive) {
+    //     now.value = Date.now();
+    //     poll();
+    //   }
+    // });
+    // removeListener = () => listener.remove();
   });
 
   onUnmounted(() => {
-    if (clockId) clearInterval(clockId);
-    if (pollId) clearInterval(pollId);
-    removeListener?.();
+    // if (clockId) clearInterval(clockId);
+    // if (pollId) clearInterval(pollId);
+    // removeListener?.();
   });
 
   const remainingMs = computed(() => {
