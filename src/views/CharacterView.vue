@@ -9,10 +9,13 @@ import { useCharacterStore } from '@/stores/character';
 import { useStepsStore } from '@/stores/steps';
 import {
   IconAlertSmall,
-  IconBoltFilled,
-  IconHeartFilled,
+  IconArrowBigUpLines,
+  IconBolt,
+  IconHeart,
   IconInfoSmall,
   IconPlus,
+  IconShield,
+  IconSword,
 } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -52,20 +55,62 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
       <div class="card-body">
         <div class="flex gap-3">
           <AvatarEditModal />
-          <h4 class="card-title leading-none flex-1">
-            {{ authStore.user?.nickname || 'Inconnu' }}#1234
+          <h4 class="card-title leading-none flex-1 text-lg">
+            {{ authStore.user?.account?.fullnickname || 'Inconnu#0000' }}
           </h4>
         </div>
 
-        <div class="divider h-[1px] my-2"></div>
+        <div class="grid grid-cols-2 gap-4 mt-2">
+          <div class="flex gap-1 items-center justify-center bg-base-300 rounded-box py-3 px-4">
+            <IconShield class="size-8 shrink-0 opacity-60" stroke-width="1.5" />
+            <div class="px-1 flex gap-1 items-baseline">
+              <div class="text-base font-bold">
+                {{ authStore.user?.character?.atk }}
+              </div>
+              <div>ATK</div>
+            </div>
+          </div>
+          <div class="flex gap-1 items-center justify-center bg-base-300 rounded-box py-3 px-4">
+            <IconSword class="size-8 shrink-0 opacity-60" stroke-width="1.5" />
+            <div class="px-1 flex gap-1 items-baseline">
+              <div class="text-base font-bold">
+                {{ authStore.user?.character?.def }}
+              </div>
+              <div>DEF</div>
+            </div>
+          </div>
+        </div>
 
-        <div class="flex gap-2 items-center">
-          <IconHeartFilled class="size-8 text-error shrink-0" stroke-width="1.5" />
-          <ProgressStatus label="Santé" :value="55" :max="100" color="error" class="grow" />
+        <div class="flex gap-2 items-center mt-2">
+          <IconHeart class="size-8 text-error shrink-0" stroke="1.5" />
+          <ProgressStatus
+            label="Santé"
+            :value="authStore.user?.character?.hpMin || 0"
+            :max="authStore.user?.character?.hpMax || 0"
+            color="error"
+            class="grow"
+          />
         </div>
         <div class="flex gap-2 items-center">
-          <IconBoltFilled class="size-8 text-warning shrink-0" stroke-width="1.5" />
-          <ProgressStatus label="Énergie" :value="100" :max="1000" color="warning" class="grow" />
+          <IconBolt class="size-8 text-warning shrink-0" stroke="1.5" />
+          <ProgressStatus
+            label="Énergie"
+            :value="authStore.user?.character?.apMin || 0"
+            :max="authStore.user?.character?.apMax || 0"
+            color="warning"
+            class="grow"
+          />
+        </div>
+        <div class="flex gap-2 items-center">
+          <IconArrowBigUpLines class="size-8 text-info shrink-0" stroke="1.5" />
+          <!-- TODO : Calculer l'XP max côté serveur -->
+          <ProgressStatus
+            label="Expérience"
+            :value="authStore.user?.character?.xp || 0"
+            :max="authStore.user?.character?.xp || 0"
+            color="info"
+            class="grow"
+          />
         </div>
       </div>
     </div>
@@ -79,6 +124,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
             :key="item.data!.id"
             :item="item"
           />
+
           <div class="btn btn-soft btn-primary btn-square h-full w-full">
             <IconPlus />
           </div>

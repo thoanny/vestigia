@@ -1,11 +1,33 @@
 import { authService } from '@/services/authService';
 import { defineStore } from 'pinia';
 
-interface User {
-  id: number;
-  isVerified: boolean;
+interface UserAccount {
   nickname: string;
-  member: boolean;
+  fullnickname: string;
+}
+
+interface UserCharacter {
+  iteration: number;
+  hpMin: number;
+  hpMax: number;
+  atk: number;
+  def: number;
+  apMin: number;
+  apMax: number;
+  lvl: number;
+  xp: number;
+  avatarBody: string;
+  avatarFace: string;
+  avatarHead: string;
+  avatarHairs: string;
+  avatarAccessory: string;
+}
+
+interface User {
+  account: UserAccount | null;
+  goals: Array<[]> | null;
+  inventory: Array<[]> | null;
+  character: UserCharacter | null;
 }
 
 interface AuthState {
@@ -69,6 +91,7 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const res = await authService.me();
+        console.log('fetchCurrentUser res', res);
         this.user = res;
       } catch {
         this.user = null;

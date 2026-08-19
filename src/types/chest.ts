@@ -1,7 +1,7 @@
 import type { InventoryItem } from '@/types/item';
 
 export interface LootEntry {
-  itemId: string;
+  itemId: number;
   weight: number; // poids relatif de tirage (plus haut = plus fréquent)
   minQty: number;
   maxQty: number;

@@ -14,7 +14,8 @@
     "lint:eslint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
     "cap:sync": "npm run build && npx cap sync",
-    "cap:android": "npx cap sync android && npx cap open android"
+    "cap:android": "npx cap sync android && npx cap open android",
+    "api-data": "node --env-file-if-exists=.env --env-file-if-exists=.env.local ./scripts/api-data.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",
@@ -29,7 +30,8 @@
     "tailwindcss": "^4.3.2",
     "vue": "^3.5.38",
     "vue-chartjs": "^5.3.4",
-    "vue-router": "^5.1.0"
+    "vue-router": "^5.1.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.4.1",

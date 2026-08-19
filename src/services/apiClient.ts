@@ -21,6 +21,9 @@ async function request(path: string, options: RequestOptions = {}): Promise<Resp
   console.log('request response status', _path, response.status);
 
   if (response.status === 401 && !options._retry) {
+    if (path === '~/token') {
+      throw new Error('Identifiants invalides');
+    }
     try {
       const newToken = await authService.refresh();
       console.log('refresh, new token:', newToken);

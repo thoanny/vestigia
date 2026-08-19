@@ -21,7 +21,6 @@ onMounted(async () => {
   appStateListener = await App.addListener('appStateChange', async ({ isActive }) => {
     if (isActive) {
       stepsStore.refreshTotalSteps();
-      await characterStore.checkChallengeTimeout();
     }
   });
 

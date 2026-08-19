@@ -8,6 +8,11 @@ const routes = [
     component: () => import('@/views/CharacterView.vue'),
   },
   {
+    path: '/account',
+    name: 'account',
+    component: () => import('@/views/AccountView.vue'),
+  },
+  {
     path: '/history',
     name: 'history',
     component: () => import('@/views/HistoryView.vue'),
@@ -89,6 +94,14 @@ router.beforeEach(async (to) => {
 
   if (to.name === 'login' && auth.isAuthenticated) {
     return { path: '/' };
+  }
+
+  if (to.name === 'account' && auth.isAuthenticated && auth.user?.account !== null) {
+    return { path: '/' };
+  }
+
+  if (auth.isAuthenticated && auth.user && auth.user.account === null && to.name !== 'account') {
+    return { name: 'account' };
   }
 });
 

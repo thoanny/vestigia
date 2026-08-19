@@ -13,10 +13,6 @@
             <div class="text-xs">
               {{ Math.min(Math.round((goal.progress / goal.steps) * 100), 100) }}&thinsp;%
             </div>
-            <div class="flex gap-1" v-if="characterStore.activeChallenge?.id === goal.id">
-              <IconStopwatch class="size-4" />
-              <span class="text-xs tabular-nums">{{ challengeTimer.countdownLabel }}</span>
-            </div>
           </div>
         </div>
         <progress
@@ -47,7 +43,6 @@
       </button>
       <!-- Challenge -->
       <button
-        @click="characterStore.startChallenge(goal.id)"
         class="btn btn-square btn-sm"
         :class="{
           'btn-success btn-soft': ['rewarded', 'achieved'].indexOf(goal.status!) >= 0,
@@ -68,7 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import { useChallengeTimer } from '@/composables/useChallengeTimer';
 import { useCharacterStore } from '@/stores/character';
 import {
   IconCheck,
@@ -83,5 +77,4 @@ import {
 defineProps(['type']);
 
 const characterStore = useCharacterStore();
-const challengeTimer = useChallengeTimer();
 </script>

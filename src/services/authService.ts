@@ -46,7 +46,7 @@ export const authService = {
   },
 
   async me() {
-    const res = await apiClient.get('~/@me');
+    const res = await apiClient.get('/@me');
     if (!res.ok) throw new Error('Session invalide');
     return res.json();
   },
