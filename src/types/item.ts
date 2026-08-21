@@ -7,7 +7,7 @@ const ItemSchema = z.object({
   description: z.string().nullable(),
   type: z.enum(['currency', 'consumable', 'material', 'equipment', 'cosmetic', 'quest']),
   rarity: z.enum(['common', 'uncommon', 'rare', 'epic', 'legendary']),
-  icon: z.string(),
+  icon: z.string().nullable(),
   stackable: z.boolean(),
   lootable: z.boolean(),
   consumable: z.boolean(),
@@ -16,9 +16,12 @@ const ItemSchema = z.object({
 export type Item = z.infer<typeof ItemSchema>;
 
 export interface InventoryItem {
-  itemId: number;
+  item: { id: number };
   quantity: number;
-  data?: Item;
+}
+
+export interface InventoryItemDetails extends InventoryItem {
+  data: Item | undefined;
 }
 
 export const ITEMS_LIST: Item[] = z.array(ItemSchema).parse(itemsData);

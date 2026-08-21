@@ -115,22 +115,24 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
       </div>
     </div>
 
-    <RouterLink to="/inventory" class="card card-sm bg-base-100 border border-base-300">
+    <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">
         <h4 class="card-title">Inventaire</h4>
         <div class="grid grid-cols-4 gap-2">
           <InventoryItemBlock
-            v-for="item in characterStore.cleanInventory.slice(0, 3)"
-            :key="item.data!.id"
+            v-for="(item, i) in characterStore.cleanInventory.slice(0, 3)"
+            :key="i"
             :item="item"
           />
-
-          <div class="btn btn-soft btn-primary btn-square h-full w-full">
+          <RouterLink
+            to="/inventory"
+            class="btn btn-soft btn-primary btn-square h-full w-full rounded-box"
+          >
             <IconPlus />
-          </div>
+          </RouterLink>
         </div>
       </div>
-    </RouterLink>
+    </div>
 
     <div class="card card-sm bg-base-100 border border-base-300">
       <div class="card-body">

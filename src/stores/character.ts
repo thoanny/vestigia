@@ -1,8 +1,9 @@
 import { GOAL_CONFIGS, type GoalConfig, type GoalStatus } from '@/types/goal';
-import { ITEMS_LIST, type InventoryItem } from '@/types/item';
+import { ITEMS_LIST, type InventoryItemDetails } from '@/types/item';
 import { getCurrentWeekDateKeys, getDateKey } from '@/utils/date';
 import { Preferences } from '@capacitor/preferences';
 import { defineStore } from 'pinia';
+import { useAuthStore } from './auth';
 import { useStepsStore } from './steps';
 
 interface ActivityEntry {
@@ -12,18 +13,17 @@ interface ActivityEntry {
 
 interface characterState {
   goals: Record<string, GoalConfig[]>;
-  // inventory: Record<string, InventoryItem[]>;
   activity: Record<string, ActivityEntry>;
 }
 
 const STORAGE_KEY_ACTIVITY = 'vestigia_activity';
 
-function mergeExpandInventory(items: InventoryItem[]): InventoryItem[] {
-  const merged = new Map<number, InventoryItem>();
-  const nonStackable: InventoryItem[] = [];
+function mergeExpandInventory(items: InventoryItemDetails[]): InventoryItemDetails[] {
+  const merged = new Map<number, InventoryItemDetails>();
+  const nonStackable: InventoryItemDetails[] = [];
 
   for (const item of items) {
-    if (!item.data!.stackable) {
+    if (!item.data?.stackable) {
       const count = Math.max(1, item.quantity);
       for (let i = 0; i < count; i++) {
         nonStackable.push({ ...item, quantity: 1 });
@@ -31,11 +31,11 @@ function mergeExpandInventory(items: InventoryItem[]): InventoryItem[] {
       continue;
     }
 
-    const existing = merged.get(item.itemId);
+    const existing = merged.get(item.item.id);
     if (existing) {
       existing.quantity += item.quantity;
     } else {
-      merged.set(item.itemId, { ...item });
+      merged.set(item.item.id, { ...item });
     }
   }
 
@@ -45,7 +45,6 @@ function mergeExpandInventory(items: InventoryItem[]): InventoryItem[] {
 export const useCharacterStore = defineStore('character', {
   state: (): characterState => ({
     goals: {},
-    // inventory: {},
     activity: {},
   }),
 
@@ -87,17 +86,15 @@ export const useCharacterStore = defineStore('character', {
       };
     },
     cleanInventory() {
-      const inventoryItems = [
-        { itemId: 1, quantity: 100 },
-        { itemId: 2, quantity: 20 },
-        { itemId: 3, quantity: 3 },
-        { itemId: 4, quantity: 10 },
-        { itemId: 5, quantity: 50 },
-        { itemId: 6, quantity: 1 },
-      ].map((item) => {
-        const details = ITEMS_LIST.find((i) => i.id === item.itemId);
-        return { ...item, data: details };
-      });
+      const auth = useAuthStore();
+      console.log(auth.user?.inventory);
+      const inventoryItems: InventoryItemDetails[] =
+        auth.user?.inventory?.map((inventory): InventoryItemDetails => {
+          const details = ITEMS_LIST.find((i) => i.id === inventory.item.id);
+          return { ...inventory, data: details };
+        }) ?? [];
+
+      console.log(inventoryItems);
 
       return mergeExpandInventory(inventoryItems);
     },
@@ -142,6 +139,39 @@ export const useCharacterStore = defineStore('character', {
       // Si challenge, vérifier si objectif atteint sur le laps de temps
       // Si autre, vérifier si nombre de pas requis dans la fenêtre (aujourd'hui ou semaine)
       // Ajouter dans l'inventaire un coffre
+    },
+
+    async addToInventory(itemId: number, quantity: number) {
+      const auth = useAuthStore();
+      if (!auth.user) return;
+      if (!auth.user?.inventory) {
+        auth.user.inventory = [{ item: { id: itemId }, quantity }];
+      } else {
+        const idx = auth.user.inventory.findIndex(
+          (userInventory) => userInventory.item.id === itemId,
+        );
+        if (auth.user.inventory[idx]) {
+          auth.user.inventory[idx].quantity += quantity;
+        } else {
+          auth.user.inventory.push({ item: { id: itemId }, quantity });
+        }
+      }
+    },
+    async removeFromInventory(itemId: number, quantity: number) {
+      const auth = useAuthStore();
+      if (!auth.user?.inventory) return;
+      const idx = auth.user.inventory.findIndex(
+        (userInventory) => userInventory.item.id === itemId,
+      );
+      if (auth.user.inventory[idx]) {
+        if (auth.user.inventory[idx].quantity < quantity) {
+          throw new Error('Not enought items in inventory');
+        } else if (auth.user.inventory[idx].quantity === quantity) {
+          auth.user.inventory.splice(idx, 1);
+        } else {
+          auth.user.inventory[idx].quantity -= quantity;
+        }
+      }
     },
   },
 });

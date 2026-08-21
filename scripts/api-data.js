@@ -1,4 +1,6 @@
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+if (process.env.SCRIPTS_DEV === true) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 
 import fs from 'node:fs';
 

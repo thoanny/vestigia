@@ -3,12 +3,11 @@
     <h1>Inventaire</h1>
     <div class="grid grid-cols-4 gap-2 mt-2">
       <InventoryItemBlock
-        v-for="item in characterStore.cleanInventory"
-        :key="item.data!.id"
+        v-for="(item, i) in characterStore.cleanInventory"
+        :key="i"
         :item="item"
       />
     </div>
-    <!-- <pre>{{ inventory }}</pre> -->
   </div>
 </template>
 

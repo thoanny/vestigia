@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import ItemDialog from '@/components/ItemDialog.vue';
+import MenuFooter from '@/components/MenuFooter.vue';
+import MenuHeader from '@/components/MenuHeader.vue';
+import { useItemDialog } from '@/composables/useItemDialog.ts';
+import { useAuthStore } from '@/stores/auth.ts';
+import { useCharacterStore } from '@/stores/character.ts';
 import { useStepsStore } from '@/stores/steps';
 import { App } from '@capacitor/app';
 import { onMounted, onUnmounted } from 'vue';
-import MenuFooter from './components/MenuFooter.vue';
-import MenuHeader from './components/MenuHeader.vue';
-import { useAuthStore } from './stores/auth.ts';
-import { useCharacterStore } from './stores/character.ts';
 
 const stepsStore = useStepsStore();
 const characterStore = useCharacterStore();
 const authStore = useAuthStore();
+
+const { dialogOpen, selectedItem, decrementQuantity } = useItemDialog();
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
 let appStateListener: Awaited<ReturnType<typeof App.addListener>> | null = null;
@@ -48,6 +52,11 @@ onUnmounted(() => {
       }"
     >
       <RouterView />
+      <ItemDialog
+        v-model="dialogOpen"
+        :selected-item="selectedItem"
+        @decrement-quantity="decrementQuantity"
+      />
     </main>
     <footer>
       <MenuFooter />
