@@ -115,7 +115,10 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
       </div>
     </div>
 
-    <div class="card card-sm bg-base-100 border border-base-300">
+    <div
+      class="card card-sm bg-base-100 border border-base-300"
+      v-if="characterStore.cleanInventory.length > 0"
+    >
       <div class="card-body">
         <h4 class="card-title">Inventaire</h4>
         <div class="grid grid-cols-4 gap-2">
