@@ -6,11 +6,22 @@
           ✕
         </button>
       </form>
-      <h4 class="text-lg font-bold">
-        {{ selectedItem.data.name }} &times;{{ selectedItem.quantity }}
-      </h4>
-      <div v-if="selectedItem.data?.description" v-html="selectedItem.data.description"></div>
-      <div class="modal-action flex-col gap-2 mt-4">
+      <div class="flex gap-3 items-center">
+        <img
+          :src="image.getUrl(`/items/${selectedItem.data.icon}`)"
+          class="object-contain aspect-square size-10 shrink-0"
+          v-if="selectedItem.data?.icon"
+        />
+        <h4 class="text-lg font-bold">
+          {{ selectedItem.data.name }} &times;{{ selectedItem.quantity }}
+        </h4>
+      </div>
+
+      <div v-if="selectedItem.data.description" v-html="selectedItem.data.description"></div>
+      <div
+        class="modal-action flex-col gap-2 mt-4"
+        v-if="selectedItem.data?.lootable || selectedItem.data?.consumable"
+      >
         <button
           class="btn btn-primary"
           v-if="selectedItem.data?.lootable"
@@ -42,6 +53,7 @@
 
 <script lang="ts" setup>
 import { apiClient } from '@/services/apiClient';
+import { imageService } from '@/services/imageService';
 import { useCharacterStore } from '@/stores/character';
 import type { InventoryItem } from '@/types/item';
 import { ref, watch } from 'vue';
@@ -53,6 +65,7 @@ const dialogEl = ref<HTMLDialogElement | null>(null);
 const isLoading = ref<boolean>(false);
 const character = useCharacterStore();
 const { addToInventory, removeFromInventory } = character;
+const image = imageService;
 
 const handleOpen = async () => {
   try {
