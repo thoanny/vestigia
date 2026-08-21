@@ -4,7 +4,6 @@ import { defineStore } from 'pinia';
 interface StepsState {
   initialized: boolean;
   healthAvailable: boolean;
-  loading: boolean;
   error: string | null;
   todaySteps: number;
   weekSteps: number;
@@ -15,7 +14,6 @@ export const useStepsStore = defineStore('steps', {
   state: (): StepsState => ({
     initialized: false,
     healthAvailable: false,
-    loading: false,
     error: null,
     todaySteps: 0,
     weekSteps: 0,
@@ -32,7 +30,6 @@ export const useStepsStore = defineStore('steps', {
     async init() {
       if (this.initialized) return;
 
-      this.loading = true;
       this.error = null;
 
       try {
@@ -45,7 +42,6 @@ export const useStepsStore = defineStore('steps', {
         this.healthAvailable = false;
       } finally {
         this.initialized = true;
-        this.loading = false;
       }
 
       if (this.healthAvailable) {
@@ -56,7 +52,6 @@ export const useStepsStore = defineStore('steps', {
     async refreshTotalSteps() {
       if (!this.healthAvailable) return;
 
-      this.loading = true;
       this.error = null;
 
       try {
@@ -65,15 +60,12 @@ export const useStepsStore = defineStore('steps', {
         this.lastSyncedAt = new Date();
       } catch (err) {
         this.error = err instanceof Error ? err.message : 'Erreur lors de la lecture des pas.';
-      } finally {
-        this.loading = false;
       }
     },
 
     reset() {
       this.initialized = false;
       this.healthAvailable = false;
-      this.loading = false;
       this.error = null;
       this.todaySteps = 0;
       this.weekSteps = 0;

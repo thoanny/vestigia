@@ -3,9 +3,9 @@
     class="radial-progress mx-auto text-sm border-10 text-center"
     :class="{
       'text-primary bg-primary-content border-primary-content':
-        !stepsStore.loading && !stepsStore.error,
+        stepsStore.initialized && !stepsStore.error,
       'text-neutral bg-neutral-content border-neutral-content':
-        stepsStore.loading && !stepsStore.error,
+        !stepsStore.initialized && !stepsStore.error,
       'text-error bg-error-content border-error-content': stepsStore.error,
     }"
     :style="`--value: ${percent}; --size: 8rem; --thickness: 0.5rem`"
@@ -13,7 +13,7 @@
     role="progressbar"
   >
     <IconWalk class="mx-auto mb-1 size-6" />
-    <strong>{{ value }}</strong> <span>/&thinsp;{{ max }}</span>
+    <strong>{{ stepsStore.todaySteps }}</strong> <span>/&thinsp;{{ max }}</span>
   </div>
 </template>
 
@@ -23,9 +23,7 @@ import { IconWalk } from '@tabler/icons-vue';
 import { computed } from 'vue';
 
 interface Props {
-  value: number;
   max?: number;
-  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,6 +33,6 @@ const props = withDefaults(defineProps<Props>(), {
 const stepsStore = useStepsStore();
 
 const percent = computed(() => {
-  return (props.value / props.max) * 100;
+  return (stepsStore.todaySteps / props.max) * 100;
 });
 </script>

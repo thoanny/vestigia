@@ -153,7 +153,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
             <button class="btn btn-circle btn-primary btn-soft btn-xs"><IconInfoSmall /></button>
           </div>
         </div>
-        <ProgressSteps :value="stepsStore.todaySteps" :loading="stepsStore.loading" />
+        <ProgressSteps />
         <div class="card-actions">
           <RouterLink to="/history" class="btn btn-primary btn-link btn-xs">
             Historique de pas
