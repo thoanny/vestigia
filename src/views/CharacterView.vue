@@ -33,11 +33,6 @@ const goalsTabs = [
     id: 'weekly',
     name: 'Hebdomadaires',
   },
-  // TODO : réactiver les challenges
-  // {
-  //   id: 'challenge',
-  //   name: 'Défis',
-  // },
 ];
 const goalsTabActive = ref(goalsTabs[0]!.id);
 </script>
@@ -130,6 +125,7 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
           <RouterLink
             to="/inventory"
             class="btn btn-soft btn-primary btn-square h-full w-full rounded-box"
+            v-if="characterStore.cleanInventory.length > 3"
           >
             <IconPlus />
           </RouterLink>
@@ -185,7 +181,6 @@ const goalsTabActive = ref(goalsTabs[0]!.id);
 
         <GoalList v-if="goalsTabActive === 'daily'" type="daily" />
         <GoalList v-else-if="goalsTabActive === 'weekly'" type="weekly" />
-        <GoalList v-else-if="goalsTabActive === 'challenge'" type="challenge" />
       </div>
     </div>
   </div>

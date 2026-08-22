@@ -1,4 +1,5 @@
 import { authService } from '@/services/authService';
+import type { UserGoalEntry } from '@/types/goal';
 import type { InventoryItem } from '@/types/item';
 import { defineStore } from 'pinia';
 
@@ -26,7 +27,7 @@ interface UserCharacter {
 
 interface User {
   account: UserAccount | null;
-  goals: Array<[]> | null;
+  goals: UserGoalEntry[] | null;
   inventory: InventoryItem[] | null;
   character: UserCharacter | null;
 }

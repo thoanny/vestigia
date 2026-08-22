@@ -6,10 +6,17 @@ export type GoalType = 'daily' | 'weekly' | 'challenge';
 export type GoalStatus =
   | 'available'
   | 'unavailable'
+  | 'loading'
   | 'running'
   | 'achieved'
   | 'failed'
   | 'rewarded';
+
+export type UserGoalEntry = {
+  goalId: number;
+  date: string;
+  status: GoalStatus;
+};
 
 export const VALIDATION_GRACE_MS = 120_000;
 
@@ -21,7 +28,7 @@ const GoalSchema = z.object({
   steps: z.number(),
   progress: z.number().default(0),
   status: z
-    .enum(['available', 'unavailable', 'running', 'achieved', 'failed', 'rewarded'])
+    .enum(['available', 'unavailable', 'loading', 'running', 'achieved', 'failed', 'rewarded'])
     .optional(),
   rewardItem: z
     .object({

@@ -13,7 +13,8 @@
           v-if="selectedItem.data?.icon"
         />
         <h4 class="text-lg font-bold">
-          {{ selectedItem.data.name }} &times;{{ selectedItem.quantity }}
+          {{ selectedItem.data.name }}
+          <template v-if="selectedItem.quantity > 1">&times;{{ selectedItem.quantity }}</template>
         </h4>
       </div>
 
